@@ -1,0 +1,27 @@
+---
+title: "다이아몬드의 크기"
+output:
+  html_document: default
+  word_document: default
+date: '2017-08-26'
+---
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller <- diamonds %>% 
+  filter(carat <= 2.5)
+```
+
+(참고)위에 보이는 R코드 한줄를 실행시키려면 R 코드 위에 커서를 위치시킨후 Cmd/Ctrl + Enter 를 누르면 된다. `Run` 아이콘이나 Cmd/Ctrl + Shift + Enter를 누르면 R code chunk가 실행된다.
+
+우리가 가지고 있는 데이터에는 모두 `r nrow(diamonds)`개의 다이아몬드가 있다. 이  중 2.5 캐럿 이상되는 다이아몬드는 `r nrow(diamonds) - nrow(smaller)` 개이다. 2.5 캐럿 미만의 다이아몬드의 분포를 보면 다음과 같다: 
+
+```{r plot1, echo = FALSE}
+smaller %>% 
+  ggplot(aes(carat)) + 
+  geom_freqpoly()
+```
+
+(참고) 텍스트, 코드, 결과를 포함하는 전체 보고서를 작성하려면 `Knit` 아이콘을 클릭하거나 Cmd/Ctrl + Shift + K 를 누르면 된다. R코드로 실행하려면 `rmarkdown::render("RmdEx1.Rmd")`를 실행하면 된다.

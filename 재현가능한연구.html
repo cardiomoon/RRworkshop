@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Reproducible Reasearch</title>
+    <meta charset="utf-8">
+    <meta name="author" content="문 건 웅" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <script src="libs/datatables-binding/datatables.js"></script>
+    <link href="libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core/js/jquery.dataTables.min.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Reproducible Reasearch
+### 문 건 웅
+### 2017/8/26
+
+---
+
+
+
+
+# Work flow of your study
+
+![](http://r4ds.had.co.nz/diagrams/data-science-communicate.png)
+
+---
+
+## R markdown의 기초
+
+&lt;table width="100%" cellspacing="5px" cellpadding="5px" border="0"&gt;
+        
+&lt;colgroup&gt;
+&lt;col width=50%&gt;
+&lt;col width=30%&gt;
+&lt;/colgroup&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src="rr1.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src="rr2.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+---
+
+### RmdEx1.Rmd
+
+
+````
+---
+title: "다이아몬드의 크기"
+output:
+  html_document: default
+  word_document: default
+date: '2017-08-26'
+---
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller &lt;- diamonds %&gt;% 
+  filter(carat &lt;= 2.5)
+```
+
+(참고)위에 보이는 R코드 한줄를 실행시키려면 R 코드 위에 커서를 위치시킨후 Cmd/Ctrl + Enter 를 누르면 된다. `Run` 아이콘이나 Cmd/Ctrl + Shift + Enter를 누르면 R code chunk가 실행된다.
+
+우리가 가지고 있는 데이터에는 모두 `r nrow(diamonds)`개의 다이아몬드가 있다. 이  중 2.5 캐럿 이상되는 다이아몬드는 `r nrow(diamonds) - nrow(smaller)` 개이다. 2.5 캐럿 미만의 다이아몬드의 분포를 보면 다음과 같다: 
+
+```{r plot1, echo = FALSE}
+smaller %&gt;% 
+  ggplot(aes(carat)) + 
+  geom_freqpoly()
+```
+
+(참고) 텍스트, 코드, 결과를 포함하는 전체 보고서를 작성하려면 `Knit` 아이콘을 클릭하거나 Cmd/Ctrl + Shift + K 를 누르면 된다. R코드로 실행하려면 `rmarkdown::render("RmdEx1.Rmd")`를 실행하면 된다.
+````
+
+---
+
+![](rmdex1.png)
+
+---
+
+![](rmdex2.png)
+---
+### Knit to Word, PDF, HTML
+
+![](http://r4ds.had.co.nz/images/RMarkdownFlow.png)
+
+---
+
+### 연습문제
+
+1. *File &gt; New File &gt; R Notebook* 메뉴에서 새 Notebook 을 만들어보자. 
+--
+
+- 만들어진 Notebook을 읽어보고 R code chunk를 실행시켜보자. 
+--
+
+
+- 코드의 내용을 변경해보고 다시 실행시켜 output의 변화를 보자
+
+---
+## Rmd파일에서 텍스트 포맷 (rmdexample.Rmd)
+
+![](rmdex3.png)
+
+
+---
+
+### Cheatsheets
+
+Help &gt; Cheatsheets &gt; R markdown Cheat Sheet
+
+![](rmarkdown-cheatsheet-2.0.pdf)
+
+---
+### Markdown Quick Reference
+
+Help &gt; Markdown Quick Reference
+
+![](rmdex4.png)
+---
+
+## R 코드 청크(Code chunks)
+
+Rmd 파일에 코드 청크를 삽입하는 세가지 방법
+
+1. 키보드 단축키: Cmd/Ctrl + Alt + I
+
+1. 에디터 툴바의 `Insert` 버튼
+
+1. 청크 경계기호인  ` ```{r} `과 ` ``` ` 삽입 
+
+---
+
+### 청크 이름
+
+코드 청크에 *` ```{r by-name} `*과 같이 이름을 붙일 수 있다. 이름을 붙이면 다음과 같은 장점이 있다.
+
+&lt;img src="chunkname.png" width="20%" /&gt;
+
+1. 에디터 왼쪽 아래의 drop-down code navigator로 코드 청크를 쉽게 찾을 수 있다.
+1. 코드 청크에 의해 만들어지는 그래프에 이름이 붙기 때문에 그림을 다른 곳에서 이용할 수 있다.
+1. 코드 청크에 의해 생기는 연산 결과를 캐쉬에 넣어 다른 곳에서 연산을 다시 수행하지 않고 사용할 수 있다.
+
+### setup 청크
+
+청크 이름 중 *setup*은 특별한 의미가 있다. `setup` 코드 청크는 다른 코드가 수행되기 전 한번만 수행된다.
+
+
+---
+
+### 청크 옵션
+
+청크 헤드에 옵션을 주어 청크의 결과물을 조절할 수 있다. 약 60개의 옵션이 제공된다.(&lt;http://yihui.name/knitr/options/&gt;). 이 중 중요한 옵션은 다음과 같다.
+
+- eval = FALSE
+
+- include = FALSE
+
+- echo = FALSE
+
+- message = FALSE, warning =FALSE
+
+- results = 'hide', fig.show='hide'
+
+- error = TRUE
+
+---
+### 청크 옵션
+
+&lt;head&gt;&lt;style&gt;
+        table {
+              font-family: serif;
+              text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      &lt;/style&gt;&lt;/head&gt;&lt;table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"&gt;&lt;caption style="text-align:center;"&gt;&lt;/caption&gt;&lt;tr&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Option&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Run code&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Show code&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Output&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Plots&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Messages&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;Warnings&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;eval = FALSE&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;include = FALSE&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;echo = FALSE&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;results = 'hide'&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;fig.show = 'hide'&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;message = FALSE&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;warning = FALSE&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-top: hidden;"&gt;&lt;/td&gt;
+&lt;td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="7" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+---
+
+### 테이블
+
+디폴트로 R markdown 에서는 데이터 프레임을 콘솔에서 보는 것과 같이 인쇄해준다.
+
+
+```r
+mtcars[1:5,]
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+```
+---
+knitr::kable() 함수를 쓰면 보다 보기 좋은 표를 얻을 수 있다.
+
+
+```r
+knitr::kable(mtcars[1:5,], caption = "A knitr kable",format="html")
+```
+
+&lt;table&gt;
+&lt;caption&gt;A knitr kable&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mpg &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cyl &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; disp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; hp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; drat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; wt &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; qsec &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; vs &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; am &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gear &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; carb &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.620 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 Wag &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Datsun 710 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 108 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.85 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.61 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet 4 Drive &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 258 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.215 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet Sportabout &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 360 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+그 외에 xtable, stargazer, pander, tables, ascii 패키지 등을 이용하면 표 출력을 보다 세밀하게 조절 할 수 있다. 다음은 ztable의 예이다. 
+
+
+```r
+ztable::ztable(mtcars[1:5,],type="html",caption = "Table: A ztable") 
+```
+
+&lt;head&gt;&lt;style&gt;
+        table {
+              font-family: serif;
+              text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      &lt;/style&gt;&lt;/head&gt;&lt;table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"&gt;&lt;caption style="text-align:center;"&gt;Table: A ztable&lt;/caption&gt;&lt;tr&gt;
+&lt;th style="border-left: 0px solid black;background-color: #FFFFFF;border-top: 2px solid gray;border-bottom: 1px solid gray;"&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;mpg&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;cyl&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;disp&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;hp&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;drat&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;wt&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;qsec&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;vs&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;am&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;gear&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;carb&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; "&gt;Mazda RX4&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;21.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;160.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;3.90&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;2.62&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;16.46&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;"&gt;4.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Mazda RX4 Wag&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;21.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;160.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.90&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;2.88&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;17.02&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Datsun 710&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;22.80&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;108.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;93.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.85&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;2.32&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;18.61&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Hornet 4 Drive&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;21.40&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;258.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.08&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.21&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;19.44&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Hornet Sportabout&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;18.70&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;8.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;360.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;175.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.15&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.44&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;17.02&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;2.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="12" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+```r
+ztable::ztable(mtcars[1:5,]) %&gt;%
+  addRowColor(4,"yellow") %&gt;%
+  addColColor(5,"orange") %&gt;%
+  addCellColor(4,5,"red") %&gt;%
+  print(type="html")
+```
+
+&lt;head&gt;&lt;style&gt;
+        table {
+              font-family: serif;
+              text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      &lt;/style&gt;&lt;/head&gt;&lt;table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"&gt;&lt;caption style="text-align:center;"&gt;&lt;/caption&gt;&lt;tr&gt;
+&lt;th style="border-left: 0px solid black;background-color: #FFFFFF;border-top: 2px solid gray;border-bottom: 1px solid gray;"&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;mpg&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;cyl&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;disp&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #FF7F00;"&gt;hp&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;drat&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;wt&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;qsec&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;vs&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;am&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;gear&lt;/th&gt;
+&lt;th &lt;th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;"&gt;carb&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; "&gt;Mazda RX4&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;21.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;160.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;background-color: #FF7F00;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;3.90&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;2.62&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;16.46&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;"&gt;4.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Mazda RX4 Wag&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;21.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;160.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FF7F00;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.90&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;2.88&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;17.02&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;4.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;background-color: #FFFF00; "&gt;Datsun 710&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;22.80&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;108.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FF0000;"&gt;93.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;3.85&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;2.32&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;18.61&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;4.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFFF00;"&gt;1.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Hornet 4 Drive&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;21.40&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;6.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;258.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FF7F00;"&gt;110.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.08&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.21&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;19.44&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;1.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td  style="border-left: 0px solid black; border-top: hidden;"&gt;Hornet Sportabout&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;18.70&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;8.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;360.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #FF7F00;"&gt;175.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.15&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.44&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;17.02&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;0.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-top: hidden;"&gt;3.00&lt;/td&gt;
+&lt;td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;"&gt;2.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="12" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+---
+
+```r
+DT::datatable(mtcars[,1:5])
+```
+
+<div id="htmlwidget-b7f28951f0004c9fafaf" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b7f28951f0004c9fafaf">{"x":{"filter":"none","data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+### Caching
+
+- 정상적으로 Rmd 파일에서 문서가 만들어질 때 아무것도 없는 상태에서 시작한다. 
+
+- 코드에서 모든 연산을 수행하기 때문에 재현성 측면에서 유리하다.
+
+- 계산에 시간이 많이 걸리는 경우 *cache = TRUE* 옵션을 주면 코드청크의 결과물을 디스크에 저장했다가 코드가 바뀌지 않은 경우 결과를 다시 사용한다. 
+
+---
+### Cache 사용시 주의할 점
+
+디폴트로 캐쉬는 dependency 에 의존하지 않는다. 예를 들어 다음 코드를 보자.
+
+    ```{r raw_data}
+    raw_data &lt;- readr::read_csv("a_very_large_file.csv")
+    ```
+    
+    ```{r processed_data, cache = TRUE}
+    processed_data &lt;- raw_data %&gt;% 
+      filter(!is.na(import_var)) %&gt;% 
+      mutate(new_variable = complicated_transformation(x, y, z))
+    ```
+
+processed_data 청크는 raw_data 청크에 의존한다. 하지만 이때 process_data 청크는 dplyr 파이프라인이 바뀐 경우에는 다시 수행되나 read_csv() 함수가 바뀐 경우에는 다시 수행되지 않는다. 이를 해결하기 위해서는 *dependson* 청크옵션을 사용하면 된다.
+
+    ```{r processed_data, cache = TRUE, dependson = "raw_data"}
+    processed_data &lt;- raw_data %&gt;% 
+      filter(!is.na(import_var)) %&gt;% 
+      mutate(new_variable = complicated_transformation(x, y, z))
+    ```
+
+---
+- *dependson* 청크옵션에는 의존성이 있는 모든 청크의 문자형벡터가 포함되어야 한다. 그래야만 의존성이 있는 청크들 중 하나라도 바뀐 경우 결과가 업데이트 된다. 
+
+--
+
+
+- 이 경우 `a_very_large_file.csv` 이 바뀐 경우에는 수행되지 않는다. *cache.extra* 옵션을 사용하면 파일의 변화를 추적할 수 있다. 
+
+
+    ```{r raw_data, cache.extra = file.info("a_very_large_file.csv")}
+    rawdata &lt;- readr::read_csv("a_very_large_file.csv")
+    ```
+    
+--
+
+- 캐쉬의 사용이 점점 복잡해지다면 *knitr::clean_cache()*를 사용해 cache를 주기적으로 청소해주는 것이 좋다. 
+
+--
+
+- 청크의 이름을 붙일 때에는  [David Robinson](https://twitter.com/drob/status/738786604731490304)의 조언대로 그 청크에서 만들어지는 가장 중요한 객체의 이름을 따서 짓는 것을 권유한다. 그럴 경우 *dependson* 옵션을 이해하기 쉬워진다. 
+
+---
+## Global Options
+
+디폴트 청크 옵션이 원하는 것과 맞지 않는 경우 *knitr::opts_chunks$set()* 함수를 써서 한꺼번에 바꿀 수 있다. 
+
+
+```r
+knitr::opts_chunks$set(
+  comment = NA,
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+만일 보고서에서 R code를 숨기고 싶은 경우에는 다음과 같이 할 수 있다.
+
+
+```r
+knitr::opts_chunks$set(
+  echo = FALSE
+)
+```
+
+
+---
+### 숫자의 출력
+
+텍스트에 숫자를 넣을 경우 format() 함수를 사용하면 소숫점 아래 자릿수나 1000단위에 맞추어 숫자를 보기 좋게 출력할 수 있다.
+
+
+```r
+comma &lt;- function(x) format(x, digits = 2, big.mark = ",")
+comma(3452345)
+[1] "3,452,345"
+comma(.12358124331)
+[1] "0.12"
+```
+
+---
+## 연습문제
+
+1. diamonds 데이터를 사용하여 cut, colour, clarity에 따른 다이아몬드의 크기를 탐색하는 section을 추가하라. 보고서를 보는 사람이 R을 모른다는 가정하에 global option을 사용하여 R code를 출력하지 않게 하라.
+
+2. RmdEx1.Rmd 파일 끝에 가장 큰 20개의 다이아몬드를 기술하는 섹션을 추가하라.
+
+3. RmdEx1.Rmd 파일에 comma() 함수를 사용하여 숫자를 보기좋게 출력하고 2.5 캐럿보다 큰 다이아몬드의 백분율을 추가하라.
+
+4. R markdown 문서를 하나 만들고 d가 b 와 c에 의존하고 b와 c는 a에 의존하는 코드청크를 만들고 각 청크에 lubraidate::now() 를 출력하고 cache = TRUE 로 지정하라. 이 문서를 통해 캐쉬를 이해하고 있는지 확인하라.
+
+---
+## YAML 헤더
+
+문서 전체의 셋팅을 조절하려면  [YAML](https://ko.wikipedia.org/wiki/YAML) 헤더의 인수를 조절하면 된다. YAML은 원래 *yet another markup language* 의 약자였으나 요즘은 *YAML Ain't Markup Language* 로 사용되고 있다. R markdown 문서에서는 출력을 세부적으로 조절하기 위해 YAML 헤더를 사용한다. 
+
+
+
+```
+---
+title: "다이아몬드의 크기"
+output:
+  html_document: default
+  word_document: default
+date: '2017-08-26'
+params: 
+  size: 2.5
+---
+```
+
+
+---
+### 인수(Parameters)
+
+R 마크다운 문서에는 보고서를 출력할 때  값을 정할 수 있는 인수들을 사용할 수 있다. 인수들은 중요한 값을 달리하여 같은 보고서를 출력할 때 유용하다. 예를 들어 지점별로 판매 보고서를 출력하거나 학생별로 시험 결과를 출력할 때, 또는 나라별로 인구통계를 출력할 때 사용할 수 있다. 인수를 정의할 때는 *params* 를 사용한다.  
+
+다음 예는 2.5 캐럿 이하의 다이아몬드의 분포를 보는 RmdEx1.Rmd 파일에서 2.5를 인수로 지정한 예이다.(RmdEx2.Rmd) 
+---
+
+
+````
+---
+title: "다이아몬드의 크기"
+output:
+  html_document: default
+  word_document: default
+date: '2017-08-26'
+params: 
+  size: 2.5
+---
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller &lt;- diamonds %&gt;% 
+  filter(carat &lt;= params$size)
+```
+
+
+우리가 가지고 있는 데이터에는 모두 `r nrow(diamonds)`개의 다이아몬드가 있다. 이  중 `r params$size` 캐럿 이상되는 다이아몬드는 `r nrow(diamonds) - nrow(smaller)` 개이다. `r params$size` 캐럿 미만의 다이아몬드의 분포를 보면 다음과 같다: 
+
+```{r, echo = FALSE}
+smaller %&gt;% 
+  ggplot(aes(carat)) + 
+  geom_freqpoly()
+```
+````
+---
+
+2.5캐럿이 아니라 2.0캐럿의 다이아몬드를 기준으로 같은 보고서를 출력하려면 다음과 같이 할 수 있다.
+
+
+```r
+rmarkdown::render("RmdEx2.Rmd", params=list(size=2.0))
+```
+---
+### fuel-economy.Rmd
+
+
+````
+---
+output: html_document
+params:
+  my_class: "suv"
+---
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+class &lt;- mpg %&gt;% filter(class == params$my_class)
+```
+
+# Fuel economy for `r params$my_class`s
+
+
+```{r}
+knitr::kable(class[1:6,])
+```
+
+
+```{r, message = FALSE}
+ggplot(class, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+````
+---
+*suv*가 아닌 *pickup* 차종에 대해 같은 보고서를 출력하려면 다음과 같이 할 수 있다.
+
+
+```r
+rmarkdown::render("fuel-economy.Rmd", params=list(my_class="pickup"))
+```
+
+mpg 데이터의 차의 종류는 다음과 같다. 
+
+
+```r
+unique(mpg$class)
+[1] "compact"    "midsize"    "suv"        "2seater"    "minivan"   
+[6] "pickup"     "subcompact"
+```
+
+모든 차의 종류에 대해 같은 보고서를 출력하려면 어떻게 해야 할까? 
+---
+
+
+```r
+reports &lt;- tibble(
+  class = unique(mpg$class),
+  filename = stringr::str_c("fuel-economy-", class, ".html"),
+  params = purrr::map(class, ~ list(my_class = .))
+)
+reports
+# A tibble: 7 x 3
+       class                     filename     params
+       &lt;chr&gt;                        &lt;chr&gt;     &lt;list&gt;
+1    compact    fuel-economy-compact.html &lt;list [1]&gt;
+2    midsize    fuel-economy-midsize.html &lt;list [1]&gt;
+3        suv        fuel-economy-suv.html &lt;list [1]&gt;
+4    2seater    fuel-economy-2seater.html &lt;list [1]&gt;
+5    minivan    fuel-economy-minivan.html &lt;list [1]&gt;
+6     pickup     fuel-economy-pickup.html &lt;list [1]&gt;
+7 subcompact fuel-economy-subcompact.html &lt;list [1]&gt;
+```
+
+```r
+reports %&gt;% 
+  select(output_file = filename, params) %&gt;% 
+  purrr::pwalk(rmarkdown::render, input = "fuel-economy.Rmd")
+```
+
+---
+
+## 그림의 사용
+
+
+figureSizing.Rmd
+
+
+````
+---
+title: "Figure sizing"
+output:
+  html_document: 
+    code_folding: hide
+    toc: true
+    toc_float: true
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,comment=NA,message=FALSE,
+                      warning=FALSE,
+                      fig.with=6,fig.asp=0.618,
+                      out.width="70%",fig.align="center")
+```
+
+## One figure
+
+```{r one fig, fig.cap="Figure 1.bula bula"}
+library(tidyverse)
+
+ggplot(mpg, mapping = aes(displ, hwy)) +
+  geom_point() +
+  geom_smooth() 
+
+```
+
+## Two figures
+
+```{r two figs,out.width="50%",fig.align="default",fig.show='hold',fig.cap="Figure 2.bula bula"}
+suv &lt;- mpg %&gt;% filter(class == "suv")
+compact &lt;- mpg %&gt;% filter(class == "compact")
+
+x_scale &lt;- scale_x_continuous(limits = range(mpg$displ))
+y_scale &lt;- scale_y_continuous(limits = range(mpg$hwy))
+col_scale &lt;- scale_colour_discrete(limits = unique(mpg$drv))
+
+ggplot(suv, aes(displ, hwy, colour = drv)) +
+  geom_point() +
+  x_scale +
+  y_scale +
+  col_scale
+
+ggplot(compact, aes(displ, hwy, colour = drv)) +
+  geom_point() +
+  x_scale +
+  y_scale +
+  col_scale
+```
+
+````
+
+---
+## 인라인 코드(Inline code)
+
+R markdown 문서의 text에 R 코드를 삽입할 때에는   `` `r 코드` `` 와 같이 사용한다. 
+
+- 우리가 가지고 있는 데이터에는 모두 `` `r nrow(diamonds)` ``개의
+다이아몬드가 있다. 
+
+- 이  중 2.5 캐럿 이상되는 다이아몬드는 `` `r nrow(diamonds) - nrow(smaller)` `` 개이다.
+
+
+
+보고서가 만들어질 때에는 다음과 같이 계산 결과가 텍스트에 삽입된다:
+
+- 우리가 가지고 있는 데이터에는 모두  53940개의 다이아몬드가 있다. 
+
+- 이  중 2.5 캐럿 이상되는 다이아몬드는 126 개이다.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
