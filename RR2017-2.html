@@ -34,7 +34,8 @@ class: center, middle, inverse, title-slide
 
 이 강의 슬라이드의 내용 중 많은 부분은 Hadley Wikham의  [R for Data Science](http://r4ds.had.co.nz/) 를 참조하여 만들어졌음을 밝힌다. 
 
-&lt;img src="http://r4ds.had.co.nz/cover.png" height="300px" /&gt;
+
+&lt;img src="http://r4ds.had.co.nz/cover.png" height="300px" style="display: block; margin: auto;" /&gt;
 
 ---
 # Work flow of your study
@@ -96,7 +97,7 @@ smaller %&gt;%
 
 ---
 
-![](rmdex1.png)
+&lt;img src="rmdex1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ---
 ## 인라인 코드(Inline code)
 
@@ -117,7 +118,7 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 
 ---
 
-![](rmdex2.png)
+&lt;img src="rmdex2.png" width="70%" style="display: block; margin: auto;" /&gt;
 ---
 ### Knit to Word, PDF, HTML
 
@@ -139,8 +140,7 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 ---
 ## Rmd파일에서 텍스트 포맷 (rmdexample.Rmd)
 
-![](rmdex3.png)
-
+&lt;img src="rmdex3.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -148,14 +148,14 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 
 Help &gt; Cheatsheets &gt; R markdown Cheat Sheet
 
-![](rmarkdown-cheatsheet-2.0.pdf)
-
+&lt;img src="rmdcheetsheet.png" width="70%" style="display: block; margin: auto;" /&gt;
 ---
 ### Markdown Quick Reference
 
 Help &gt; Markdown Quick Reference
 
-![](rmdex4.png)
+
+&lt;img src="rmdex4.png" width="70%" style="display: block; margin: auto;" /&gt;
 ---
 
 ## R 코드 청크(Code chunks)
@@ -174,7 +174,7 @@ Rmd 파일에 코드 청크를 삽입하는 세가지 방법
 
 코드 청크에 *` ```{r by-name} `*과 같이 이름을 붙일 수 있다. 이름을 붙이면 다음과 같은 장점이 있다.
 
-&lt;img src="chunkname.png" width="20%" /&gt;
+&lt;img src="chunkname.png" width="20%" style="display: block; margin: auto;" /&gt;
 
 1. 에디터 왼쪽 아래의 drop-down code navigator로 코드 청크를 쉽게 찾을 수 있다.
 1. 코드 청크에 의해 만들어지는 그래프에 이름이 붙기 때문에 그림을 다른 곳에서 이용할 수 있다.
@@ -303,6 +303,9 @@ Rmd 파일에 코드 청크를 삽입하는 세가지 방법
 
 ```r
 mtcars[1:5,]
+```
+
+```
                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
 Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
 Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
@@ -515,7 +518,8 @@ ztable(mtcars[1:5,],type="html",caption = "Table: A ztable")
 &lt;td colspan="12" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
-
+---
+ztable을 이용하면 row color, column color cell color등을 쉽게 바꿀수 있다.
 
 
 ```r
@@ -629,8 +633,8 @@ ztable(mtcars[1:5,]) %&gt;%
 DT::datatable(mtcars[,1:5])
 ```
 
-<div id="htmlwidget-1001381c2f8fcd68b2f8" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1001381c2f8fcd68b2f8">{"x":{"filter":"none","data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"crosstalkOptions":{"key":null,"group":null},"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6640b0ee56cf8c88bcf5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6640b0ee56cf8c88bcf5">{"x":{"filter":"none","data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"crosstalkOptions":{"key":null,"group":null},"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":[],"jsHooks":[]}</script>
 
 ---
 ### Caching
@@ -719,8 +723,17 @@ knitr::opts_chunks$set(
 ```r
 comma &lt;- function(x) format(x, digits = 2, big.mark = ",")
 comma(3452345)
+```
+
+```
 [1] "3,452,345"
+```
+
+```r
 comma(.12358124331)
+```
+
+```
 [1] "0.12"
 ```
 
@@ -845,6 +858,9 @@ mpg 데이터의 차의 종류는 다음과 같다.
 
 ```r
 unique(mpg$class)
+```
+
+```
 [1] "compact"    "midsize"    "suv"        "2seater"    "minivan"   
 [6] "pickup"     "subcompact"
 ```
@@ -860,6 +876,9 @@ reports &lt;- tibble(
   params = purrr::map(class, ~ list(my_class = .))
 )
 reports
+```
+
+```
 # A tibble: 7 x 3
        class                     filename     params
        &lt;chr&gt;                        &lt;chr&gt;     &lt;list&gt;
@@ -944,7 +963,7 @@ ggplot(compact, aes(displ, hwy, colour = drv)) +
 ---
 ## 웹R의 reproducible research
 
-&lt;img src="2.png" width="70%" /&gt;
+&lt;img src="2.png" width="70%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({

@@ -17,8 +17,7 @@ pagebreak <-"---"
 inline <- function(x = "") paste0("`` `r ", x, "` ``")
 library(tidyverse)
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(comment=NA,message=FALSE, collapse=TRUE)
-
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,comment=NA,fig.align="center")
 ```
 
 
@@ -27,8 +26,10 @@ knitr::opts_chunk$set(comment=NA,message=FALSE, collapse=TRUE)
 
 이 강의 슬라이드의 내용 중 많은 부분은 Hadley Wikham의  [R for Data Science](http://r4ds.had.co.nz/) 를 참조하여 만들어졌음을 밝힌다. 
 
+
 ```{r,out.height="300px",echo=FALSE}
-knitr::include_graphics("http://r4ds.had.co.nz/cover.png")
+library(knitr)
+include_graphics("http://r4ds.had.co.nz/cover.png")
 ```
 
 ---
@@ -58,13 +59,16 @@ knitr::include_graphics("http://r4ds.had.co.nz/cover.png")
 ---
 ### File > Open File.. > RmdEx1.Rmd 
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
 cat(htmltools::includeText("RmdEx1.Rmd"))
 ```
 
 ---
 
-![](rmdex1.png)
+```{r,echo=FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
+library(knitr)
+include_graphics("rmdex1.png")
+```
 ---
 ## 인라인 코드(Inline code)
 
@@ -85,7 +89,10 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 
 ---
 
-![](rmdex2.png)
+```{r,echo=FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
+library(knitr)
+include_graphics("rmdex2.png")
+```
 ---
 ### Knit to Word, PDF, HTML
 
@@ -107,8 +114,10 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 ---
 ## Rmd파일에서 텍스트 포맷 (rmdexample.Rmd)
 
-![](rmdex3.png)
-
+```{r,echo=FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
+library(knitr)
+include_graphics("rmdex3.png")
+```
 
 ---
 
@@ -116,14 +125,18 @@ R markdown 문서의 text에 R 코드를 삽입할 때에는 ` `r `  코드 ` ` 
 
 Help > Cheatsheets > R markdown Cheat Sheet
 
-![](rmarkdown-cheatsheet-2.0.pdf)
-
+```{r, echo = FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
+    knitr::include_graphics("rmdcheetsheet.png")
+```
 ---
 ### Markdown Quick Reference
 
 Help > Markdown Quick Reference
 
-![](rmdex4.png)
+
+```{r, echo = FALSE,fig.width=6,fig.asp=0.618,out.width="70%"}
+    knitr::include_graphics("rmdex4.png")
+```
 ---
 
 ## R 코드 청크(Code chunks)
@@ -215,7 +228,8 @@ knitr::kable(mtcars[1:5,], caption = "A knitr kable",format="html")
 require(ztable)
 ztable(mtcars[1:5,],type="html",caption = "Table: A ztable") 
 ```
-
+---
+ztable을 이용하면 row color, column color cell color등을 쉽게 바꿀수 있다.
 
 ```{r, results='asis'}
 ztable(mtcars[1:5,]) %>%
