@@ -32,7 +32,7 @@ https://github.com/cardiomoon/RRworkshop
 
 ```{r,eval=FALSE}
 install.packages(c("knitr","tidyverse","learnr","nycflights13"))
-install.packages("devtools","moonBook","ztable","DT")
+install.packages(c("devtools","moonBook","ztable","DT"))
 ```
 ---
 
