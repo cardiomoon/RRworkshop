@@ -1,6 +1,6 @@
 # Reproducible Reasearch 강의 자료
 
-### 일시: 2017년 10월 11일
+### 일시: 2018년 9월 4일
 
 ### 강의: 문건웅(cardiomoon@gmail.com) 
 
@@ -40,9 +40,9 @@ install.packages(c("devtools","moonBook","ztable","DT"))
 
 강의에는 다음 파일이 사용됩니다.
 
-- RR2017.html
+- Reproducible Research(1).pdf
 
-- RR2017-2.html
+- Reproducible Research(2).pdf
 
 ---
 

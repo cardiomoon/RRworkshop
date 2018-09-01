@@ -3,7 +3,7 @@ title: "다이아몬드의 크기"
 output:
   html_document: default
   word_document: default
-date: '2017-08-26'
+date: '2018-09-04'
 ---
 
 ```{r setup, include = FALSE}
