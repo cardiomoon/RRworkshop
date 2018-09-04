@@ -8,9 +8,8 @@ params:
   size: 2.5
 ---
 
-```{r setup, include = FALSE}
-library(ggplot2)
-library(dplyr)
+```{r,message=FALSE}
+library(tidyverse)
 
 smaller <- diamonds %>% 
   filter(carat <= params$size)
@@ -19,8 +18,15 @@ smaller <- diamonds %>%
 
 우리가 가지고 있는 데이터에는 모두 `r nrow(diamonds)`개의 다이아몬드가 있다. 이  중 `r params$size` 캐럿 이상되는 다이아몬드는 `r nrow(diamonds) - nrow(smaller)` 개이다. `r params$size` 캐럿 미만의 다이아몬드의 분포를 보면 다음과 같다: 
 
-```{r, echo = FALSE}
+```{r,message=FALSE}
 smaller %>% 
   ggplot(aes(carat)) + 
   geom_freqpoly()
 ```
+
+install.packages("DT")
+
+```{r,results='asis'}
+DT::datatable(mtcars[,1:5])
+```
+

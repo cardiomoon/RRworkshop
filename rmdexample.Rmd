@@ -38,3 +38,13 @@ First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
 Content Cell  | Content Cell
+
+
+```{r,comment=NA}
+head(mtcars)
+plot(mtcars)
+```
+
+
+
+

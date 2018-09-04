@@ -59,3 +59,5 @@ install.packages(c("devtools","moonBook","ztable","DT"))
 - rmdexample.Rmd
 
 - fuel-economy.Rmd
+
+이 예제파일들을 한글encoding이 UTF-8로 되어 있습니다. 한글윈도우즈를 사용하시는 분들은 RStudio의 Tools...Project Options... Code Editing ... Text Encoding을 UTF-8로 바꾸셔야 합니다
