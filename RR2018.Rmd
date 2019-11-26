@@ -1,7 +1,7 @@
 ---
 title: "Reproducible Research(1)"
 author: "문건웅"
-date: 2018-9-4
+date: 2019-11-26
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -25,12 +25,14 @@ options(htmltools.dir.version = FALSE)
 - R packages (CRAN)
   - mycor, moonBook, ztable, ggiraphExta, dplyrAssist, editData
   - ggplotAssist, webr, rrtable
+  - predict3d, processR
 
 - Books
   - 의학논문 작성을 위한 R통계와 그래프(2015, 한나래)
      - 2015년 대한민국 학술원 우수학술도서
   - 웹에서 클릭만으로 하는 R 통계분석(2015, 한나래) 
   - Learn ggplot2 Using Shiny App(2017, Springer)
+  - R을 이용한 조건부과정분석(2019,학지사)
 
 - Web-R.org 운영
 

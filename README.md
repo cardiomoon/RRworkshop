@@ -1,6 +1,6 @@
 # Reproducible Reasearch 강의 자료
 
-### 일시: 2018년 9월 4일
+### 일시: 2019년 11월 26일
 
 ### 강의: 문건웅(cardiomoon@gmail.com) 
 
@@ -33,6 +33,7 @@ https://github.com/cardiomoon/RRworkshop
 ```{r,eval=FALSE}
 install.packages(c("knitr","tidyverse","learnr","nycflights13"))
 install.packages(c("devtools","moonBook","ztable","DT"))
+install.packages(c("export","flextable","predict3d"))
 ```
 ---
 
@@ -43,6 +44,8 @@ install.packages(c("devtools","moonBook","ztable","DT"))
 - Reproducible Research(1).pdf
 
 - Reproducible Research(2).pdf
+
+- Reproducible Research(3).pdf
 
 ---
 
@@ -59,5 +62,7 @@ install.packages(c("devtools","moonBook","ztable","DT"))
 - rmdexample.Rmd
 
 - fuel-economy.Rmd
+
+- RmdEx3.Rmd
 
 이 예제파일들을 한글encoding이 UTF-8로 되어 있습니다. 한글윈도우즈를 사용하시는 분들은 RStudio의 Tools...Project Options... Code Editing ... Text Encoding을 UTF-8로 바꾸셔야 합니다

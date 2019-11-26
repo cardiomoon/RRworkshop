@@ -418,12 +418,6 @@ figureSizing.Rmd
 cat(htmltools::includeText("figureSizing.Rmd"))
 ```
 
----
-## 웹R의 reproducible research
-
-```{r out.width="70%",echo=FALSE}
-knitr::include_graphics("2.png")
-```
 
 
 
